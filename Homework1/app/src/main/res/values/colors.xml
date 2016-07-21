@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#D9D9D9</color>
+    <color name="colorPrimaryDark">#262626</color>
+    <color name="colorAccent">#3C3C3C</color>
+
+    <color name="layoutBackground">#595959</color>
+
+    <color name="componentBackground">#D9D9D9</color>
+    <color name="componentForeground">#262626</color>
+
+    <color name="buttonGradientStart">#D9D9D9</color>
+    <color name="buttonGradientCenter">#BFBFBF</color>
+    <color name="buttonGradientEnd">#A6A6A6</color>
+
+    <color name="green">#00AF33</color>
+    <color name="blue">#104E8B</color>
+</resources>

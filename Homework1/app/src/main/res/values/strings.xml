@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Homework1</string>
+    <string name="defaultNumber">0</string>
+    <string name="buttonIncrementText">Increment</string>
+    <string name="buttonResetText">Reset</string>
+</resources>

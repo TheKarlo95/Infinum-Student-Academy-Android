@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Homework2</string>
+    <string name="open_webview">Open Webview</string>
+    <string name="open_browser">Open browser</string>
+    <string name="chooser_title">Choose browser</string>
+    <string name="back"><![CDATA[<]]></string>
+    <string name="forward"><![CDATA[>]]></string>
+    <string name="go">Go</string>
+</resources>
