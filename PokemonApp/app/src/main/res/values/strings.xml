@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">PokemonApp</string>
+
+    <!-- activity_pokemon_list  -->
+    <string name="pokemon_title">Pokemon</string>
+    <string name="pokeball">Pokeball</string>
+    <string name="no_pokemons">No pokemons</string>
+    <string name="add_pokemons">To add some pokemons,\n press + icon.</string>
+
+    <!-- menu_pokemon_list  -->
+    <string name="add">Add</string>
+
+    <!-- activity_add_pokemon  -->
+    <string name="add_pokemon_title">Add new Pokemon</string>
+    <string name="save">Save</string>
+
+    <!-- activity_details  -->
+    <string name="details_title">Details</string>
+    <string name="height_in_meters">%1$sm</string>
+    <string name="weight_in_kilos">%1$skg</string>
+
+    <!-- pokemon attributes  -->
+    <string name="pokemon_name">Name</string>
+    <string name="pokemon_height">Height</string>
+    <string name="pokemon_weight">Weight</string>
+    <string name="pokemon_category">Category</string>
+    <string name="pokemon_abilities">Abilities</string>
+    <string name="pokemon_gender">Gender</string>
+    <string name="pokemon_description">Description</string>
+    <string name="pokemon_image">Pokemon image</string>
+
+    <!-- error messages  -->
+    <string name="pokemon_already_exists">Pokemon %1$s already exists</string>
+    <string name="image_not_found">Image not found</string>
+    <string name="name_null">Name cannot be null</string>
+    <string name="name_empty">Name cannot be empty</string>
+    <string name="height_positive">Height must be positive</string>
+    <string name="weight_positive">Weight must be positive</string>
+    <string name="category_null">Category cannot be null</string>
+    <string name="category_empty">Category cannot be empty</string>
+    <string name="abilities_null">Abilities cannot be null</string>
+    <string name="abilities_empty">Abilities cannot be empty</string>
+    <string name="gender_null">Gender cannot be null</string>
+    <string name="gender_empty">Gender cannot be empty</string>
+    <string name="description_null">Description cannot be null</string>
+    <string name="description_empty">Description cannot be empty</string>
+    <string name="image_null">Image cannot be null</string>
+</resources>
