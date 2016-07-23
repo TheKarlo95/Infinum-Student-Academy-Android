@@ -1,14 +1,16 @@
 package hr.vrbic.karlo.pokemonapp.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -19,8 +21,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,10 +37,14 @@ import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
  */
 public class AddPokemonActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_PERMISSION = 1;
+
     /**
      * Request code for picking an image.
      */
-    private static final int REQ_CODE_PICK_IMAGE = 1;
+    private static final int REQ_CODE_PICK_IMAGE = 2;
+
+    private static final String IMAGE_URI = "image_uri";
 
     /**
      * {@linkplain EditText} for name.
@@ -83,6 +87,8 @@ public class AddPokemonActivity extends AppCompatActivity {
     @BindView(R.id.iv_image)
     ImageView ivImage;
 
+    private Uri imageUri;
+
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,19 @@ public class AddPokemonActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(IMAGE_URI, imageUri);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        imageUri = savedInstanceState.getParcelable(IMAGE_URI);
+        ivImage.setImageURI(imageUri);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -104,22 +123,34 @@ public class AddPokemonActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
             case REQ_CODE_PICK_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    try {
-                        Bitmap image = decodeUri(selectedImage);
-                        ivImage.setImageBitmap(image);
-                    } catch (FileNotFoundException e) {
-                        Toast.makeText(this, getString(R.string.image_not_found), Toast.LENGTH_SHORT).show();
-                    }
+                    imageUri = data.getData();
+                    ivImage.setImageURI(imageUri);
                 }
+                break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startActivityForResult(getImagePickIntent(), REQ_CODE_PICK_IMAGE);
+                } else {
+                    showMessage("Permission request denied");
+                }
+                break;
+        }
+
     }
 
     @Override
@@ -166,11 +197,10 @@ public class AddPokemonActivity extends AppCompatActivity {
         String abilities = etAbilities.getText().toString();
         String gender = etGender.getText().toString();
         String description = etDescription.getText().toString();
-        ivImage.buildDrawingCache();
-        Bitmap image = ivImage.getDrawingCache();
 
         try {
-            Pokemon pokemon = new Pokemon(this, name, height, weight, category, abilities, gender, description, image);
+            Pokemon pokemon = new Pokemon(this, name, height, weight, category, abilities, gender, description,
+                    imageUri);
 
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK, intent);
@@ -189,9 +219,48 @@ public class AddPokemonActivity extends AppCompatActivity {
      */
     @OnClick(R.id.fab_add_image)
     public void onAddImageClick() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, REQ_CODE_PICK_IMAGE);
+        if (ActivityCompat.checkSelfPermission(AddPokemonActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AddPokemonActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                showExplanation();
+            } else {
+                ActivityCompat.requestPermissions(AddPokemonActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_CODE_PERMISSION);
+            }
+        } else {
+            startActivityForResult(getImagePickIntent(), REQ_CODE_PICK_IMAGE);
+        }
+    }
+
+    private Intent getImagePickIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+
+        return intent;
+    }
+
+    private void showExplanation() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name))
+                .setMessage(R.string.read_external_permission_explanation)
+                .setPositiveButton(getString(R.string.allow), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        ActivityCompat.requestPermissions(AddPokemonActivity.this, new String[]{Manifest.permission
+                                        .READ_EXTERNAL_STORAGE},
+                                REQUEST_CODE_PERMISSION);
+                    }
+                })
+                .setNegativeButton(getString(R.string.deny), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).create().show();
     }
 
     /**
@@ -205,7 +274,8 @@ public class AddPokemonActivity extends AppCompatActivity {
                 || !etCategory.getText().toString().isEmpty()
                 || !etAbilities.getText().toString().isEmpty()
                 || !etGender.getText().toString().isEmpty()
-                || !etDescription.getText().toString().isEmpty()) {
+                || !etDescription.getText().toString().isEmpty()
+                || imageUri != null) {
             showSaveChangesAlert();
         } else {
             setResult(Activity.RESULT_CANCELED, null);
@@ -237,39 +307,16 @@ public class AddPokemonActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    /**
-     * Decodes the image at specified {@code selectedImageUri} and returns it as a scaled down image.
-     *
-     * @param selectedImageUri URI of the selected image
-     * @return scaled down {@linkplain Bitmap bitmap}
-     * @throws FileNotFoundException if the provided URI could not be opened
-     */
-    private Bitmap decodeUri(Uri selectedImageUri) throws FileNotFoundException {
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImageUri), null, o);
+    private void showMessage(String message) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name))
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 250;
-
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp / 2 < REQUIRED_SIZE
-                    || height_tmp / 2 < REQUIRED_SIZE) {
-                break;
-            }
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImageUri), null, o2);
-
+                    }
+                }).create().show();
     }
+
 }

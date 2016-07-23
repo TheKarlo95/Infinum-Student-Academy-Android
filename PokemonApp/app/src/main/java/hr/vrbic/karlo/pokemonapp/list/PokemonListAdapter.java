@@ -1,7 +1,7 @@
 package hr.vrbic.karlo.pokemonapp.list;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,10 +97,10 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
         Pokemon pokemon = pokemons.get(position);
 
         String name = pokemon.getName();
-        Bitmap image = pokemon.getImage();
+        Uri imageUri = pokemon.getImageUri();
 
         holder.tvPokemonName.setText(name);
-        holder.ivPokemonImage.setImageBitmap(image);
+        holder.ivPokemonImage.setImageURI(imageUri);
     }
 
     @Override

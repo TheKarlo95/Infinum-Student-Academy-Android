@@ -13,6 +13,10 @@
     <!-- activity_add_pokemon  -->
     <string name="add_pokemon_title">Add new Pokemon</string>
     <string name="save">Save</string>
+    <string name="read_external_permission_explanation">You need to allow this application to read external storage so
+        you could add pokemon image.</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
 
     <!-- activity_details  -->
     <string name="details_title">Details</string>
@@ -45,4 +49,5 @@
     <string name="description_null">Description cannot be null</string>
     <string name="description_empty">Description cannot be empty</string>
     <string name="image_null">Image cannot be null</string>
+
 </resources>

@@ -81,7 +81,7 @@ public class DetailsActivity extends AppCompatActivity {
         tvAbilities.setText(pokemon.getAbilities());
         tvGender.setText(pokemon.getGender());
         tvDescription.setText(pokemon.getDescription());
-        ivImage.setImageBitmap(pokemon.getImage());
+        ivImage.setImageURI(pokemon.getImageUri());
     }
 
     @Override

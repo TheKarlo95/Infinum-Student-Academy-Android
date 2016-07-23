@@ -1,17 +1,13 @@
 package hr.vrbic.karlo.pokemonapp.beans;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Objects;
 
 import hr.vrbic.karlo.pokemonapp.R;
 import hr.vrbic.karlo.pokemonapp.utilities.Numbers;
@@ -43,6 +39,9 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
             return new Pokemon[size];
         }
     };
+
+    private static final Uri DEFAULT_IMAGE = Uri.parse("android.resource://hr.vrbic.karlo.pokemonapp/drawable/" +
+            "ic_person_details");
 
     /**
      * Name of the Pokemon.
@@ -77,10 +76,9 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
     @NonNull
     private String description;
     /**
-     * Image of the Pokemon.
+     * Image URI of the Pokemon.
      */
-    @NonNull
-    private Bitmap image;
+    private Uri imageUri;
 
     /**
      * Constructs a new {@code Pokemon} with specified parameters
@@ -93,8 +91,8 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
      * @param abilities   the abilities of the Pokemon
      * @param gender      the gender of the Pokemon.
      * @param description the description of the Pokemon
-     * @param image       the image of the Pokemon
-     * @throws NullPointerException     if any of the parameters are {@code null}
+     * @param imageUri       the imageUri URI of the Pokemon
+     * @throws NullPointerException     if any of the parameters(except {@code imageUri}) are {@code null}
      * @throws IllegalArgumentException if parameters {@code height} or {@code weight} aren't positive numbers
      */
     public Pokemon(@NonNull Context context,
@@ -105,7 +103,7 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
                    @NonNull String abilities,
                    @NonNull String gender,
                    @NonNull String description,
-                   @NonNull Bitmap image) {
+                   Uri imageUri) {
         this.name = Strings.requireNonNullAndNonEmpty(name, context.getString(R.string.name_null),
                 context.getString(R.string.name_empty));
         this.height = Numbers.requirePositive(height, context.getString(R.string.height_positive));
@@ -118,7 +116,11 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
                 context.getString(R.string.gender_empty));
         this.description = Strings.requireNonNullAndNonEmpty(description, context.getString(R.string.description_null),
                 context.getString(R.string.description_empty));
-        this.image = Objects.requireNonNull(image, context.getString(R.string.image_null));
+        if(imageUri != null) {
+            this.imageUri = imageUri;
+        } else {
+            this.imageUri = DEFAULT_IMAGE;
+        }
     }
 
     /**
@@ -134,8 +136,7 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
         this.abilities = in.readString();
         this.gender = in.readString();
         this.description = in.readString();
-        byte[] bytes = in.createByteArray();
-        this.image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        this.imageUri = in.readParcelable(Uri.class.getClassLoader());
     }
 
     /**
@@ -207,13 +208,13 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
     }
 
     /**
-     * Returns the image.
+     * Returns the image URI.
      *
-     * @return the image
+     * @return the image URI
      */
     @NonNull
-    public Bitmap getImage() {
-        return image;
+    public Uri getImageUri() {
+        return imageUri;
     }
 
     @Override
@@ -244,7 +245,9 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
                 ", weight=" + weight +
                 ", category='" + category + '\'' +
                 ", abilities='" + abilities + '\'' +
+                ", gender='" + gender + '\'' +
                 ", description='" + description + '\'' +
+                ", imageUri=" + imageUri +
                 '}';
     }
 
@@ -267,10 +270,7 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
         dest.writeString(this.abilities);
         dest.writeString(this.gender);
         dest.writeString(this.description);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] bytes = stream.toByteArray();
-        dest.writeByteArray(bytes);
+        dest.writeParcelable(this.imageUri, flags);
     }
 
 }

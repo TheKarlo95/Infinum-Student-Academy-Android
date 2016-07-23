@@ -43,6 +43,11 @@ public class PokemonListActivity extends AppCompatActivity {
     static final String POKEMON = "pokemon";
 
     /**
+     * Key for Pokemons used in savedInstanceState.
+     */
+    static final String POKEMONS = "pokemons";
+
+    /**
      * List of Pokemons.
      */
     @BindView(R.id.erv_pokemons)
@@ -90,14 +95,14 @@ public class PokemonListActivity extends AppCompatActivity {
 
         if (pokemonList != null && !pokemonList.isEmpty()) {
             Pokemon[] pokemons = adapter.getAllPokemons().toArray(new Pokemon[1]);
-            outState.putParcelableArray("pokemons", pokemons);
+            outState.putParcelableArray(POKEMONS, pokemons);
         }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Pokemon[] pokemons = (Pokemon[]) savedInstanceState.getParcelableArray("pokemons");
+        Pokemon[] pokemons = (Pokemon[]) savedInstanceState.getParcelableArray(POKEMONS);
         adapter.addAll(pokemons);
     }
 
@@ -131,8 +136,9 @@ public class PokemonListActivity extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Pokemon pokemon = extras.getParcelable(POKEMON);
 
-                if (!adapter.add(pokemon)) {
-                    Toast.makeText(this, getString(R.string.pokemon_already_exists, pokemon.getName()), Toast.LENGTH_LONG).show();
+                if (pokemon != null && !adapter.add(pokemon)) {
+                    Toast.makeText(this, getString(R.string.pokemon_already_exists, pokemon.getName()),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         }
