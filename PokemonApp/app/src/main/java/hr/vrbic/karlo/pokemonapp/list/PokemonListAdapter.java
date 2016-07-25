@@ -169,6 +169,15 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
         }
     }
 
+    public void addAll(Collection<Pokemon> pokemons) {
+        if (pokemons == null || pokemons.isEmpty())
+            return;
+
+        for (Pokemon pokemon : pokemons) {
+            add(pokemon);
+        }
+    }
+
     /**
      * Removes the specified Pokemon from this adapter.
      *

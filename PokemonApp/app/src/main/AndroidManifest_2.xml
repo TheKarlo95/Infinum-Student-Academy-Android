@@ -11,8 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:name=".activities.PokemonListActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,6 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.AddPokemonActivity"
+            android:parentActivityName=".activities.PokemonListActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".activities.DetailsActivity"
+            android:parentActivityName=".activities.PokemonListActivity"/>
     </application>
 
 </manifest>

@@ -18,7 +18,6 @@ import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
 import hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView;
 import hr.vrbic.karlo.pokemonapp.list.PokemonListAdapter;
 
-
 /**
  * {@code PokemonListActivity} is a launcher activity that display list of Pokemons.
  *
@@ -113,14 +112,14 @@ public class PokemonListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_pokemon_list, menu);
+        getMenuInflater().inflate(R.menu.menu_add_button, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add_pokemon:
+            case R.id.item_add_pokemon:
                 Intent intent = new Intent(PokemonListActivity.this, AddPokemonActivity.class);
                 startActivityForResult(intent, ADD_POKEMON_REQUEST);
                 return true;

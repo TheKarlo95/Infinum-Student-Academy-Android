@@ -91,7 +91,7 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
      * @param abilities   the abilities of the Pokemon
      * @param gender      the gender of the Pokemon.
      * @param description the description of the Pokemon
-     * @param imageUri       the imageUri URI of the Pokemon
+     * @param imageUri    the imageUri URI of the Pokemon
      * @throws NullPointerException     if any of the parameters(except {@code imageUri}) are {@code null}
      * @throws IllegalArgumentException if parameters {@code height} or {@code weight} aren't positive numbers
      */
@@ -116,7 +116,7 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
                 context.getString(R.string.gender_empty));
         this.description = Strings.requireNonNullAndNonEmpty(description, context.getString(R.string.description_null),
                 context.getString(R.string.description_empty));
-        if(imageUri != null) {
+        if (imageUri != null) {
             this.imageUri = imageUri;
         } else {
             this.imageUri = DEFAULT_IMAGE;
@@ -127,8 +127,9 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
      * Constructs a new {@code Pokemon} with specified {@linkplain Parcel} object {@code in}.
      *
      * @param in {@linkplain Parcel} object of {@code Pokemon}
+     * @throws NullPointerException if parameter {@code in} is {@code null}
      */
-    protected Pokemon(Parcel in) {
+    protected Pokemon(@NonNull Parcel in) {
         this.name = in.readString();
         this.height = in.readDouble();
         this.weight = in.readDouble();
