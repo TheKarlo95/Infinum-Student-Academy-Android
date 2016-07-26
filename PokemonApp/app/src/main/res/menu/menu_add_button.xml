@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add_pokemon"
+        android:id="@+id/item_add_pokemon"
         android:icon="@drawable/ic_add"
         android:title="@string/add"
         app:showAsAction="always"/>

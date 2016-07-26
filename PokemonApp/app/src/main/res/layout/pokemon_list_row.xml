@@ -9,6 +9,10 @@
         android:id="@+id/iv_pokemon_image"
         android:layout_width="64dp"
         android:layout_height="match_parent"
+        android:paddingStart="@dimen/list_image_horizontal_padding"
+        android:paddingEnd="@dimen/list_image_horizontal_padding"
+        android:paddingTop="@dimen/list_image_vertical_padding"
+        android:paddingBottom="@dimen/list_image_vertical_padding"
         android:contentDescription="pokemon_image"/>
 
     <TextView
