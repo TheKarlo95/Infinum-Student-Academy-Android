@@ -10,7 +10,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 
 /**
  * {@code DetailsActivity} is an activity that displays the Pokemon's name and description.

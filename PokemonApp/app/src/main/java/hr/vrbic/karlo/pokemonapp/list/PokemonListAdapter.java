@@ -20,7 +20,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 
 /**
  * {@code PokemonListAdapter} is an adapter that handles all of the data about Pokemons.

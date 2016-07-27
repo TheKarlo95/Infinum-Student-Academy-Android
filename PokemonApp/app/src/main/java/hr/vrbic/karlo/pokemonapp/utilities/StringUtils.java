@@ -3,18 +3,18 @@ package hr.vrbic.karlo.pokemonapp.utilities;
 import java.util.Objects;
 
 /**
- * {@code Strings} is a utility class that offers static methods that do some tasks with {@linkplain String strings}.
+ * {@code StringUtils} is a utility class that offers static methods that do some tasks with {@linkplain String strings}.
  *
  * @author Karlo Vrbic
  * @version 1.0
  */
 @SuppressWarnings("unused")
-public class Strings {
+public class StringUtils {
 
     /**
      * Unused constructor.
      */
-    private Strings() {
+    private StringUtils() {
     }
 
     /**

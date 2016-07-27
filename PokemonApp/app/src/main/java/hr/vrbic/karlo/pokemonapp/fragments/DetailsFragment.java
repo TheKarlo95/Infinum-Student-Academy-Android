@@ -13,10 +13,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 
 public class DetailsFragment extends AbstractFragment {
 
+    private static final String FRAGMENT_TAG = "details_pokemon";
     private static final String POKEMON = "pokemon";
 
     @BindView(R.id.tv_details_name)
@@ -50,6 +51,11 @@ public class DetailsFragment extends AbstractFragment {
         DetailsFragment fragment = new DetailsFragment();
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return FRAGMENT_TAG;
     }
 
     @Override

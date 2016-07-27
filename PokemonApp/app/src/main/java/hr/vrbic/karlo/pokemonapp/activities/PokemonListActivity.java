@@ -14,7 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 import hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView;
 import hr.vrbic.karlo.pokemonapp.list.PokemonListAdapter;
 

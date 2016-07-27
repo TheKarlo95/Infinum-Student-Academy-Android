@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 
 /**
  * {@code AddPokemonActivity} is an activity that gives user the ability to add new Pokemons to the list.

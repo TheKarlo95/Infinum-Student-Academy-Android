@@ -24,14 +24,15 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import hr.vrbic.karlo.pokemonapp.R;
 import hr.vrbic.karlo.pokemonapp.activities.MainActivity;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
-import hr.vrbic.karlo.pokemonapp.beans.PokemonsList;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.PokemonsList;
+import hr.vrbic.karlo.pokemonapp.utilities.ApplicationUtils;
 
 public class AddPokemonFragment extends AbstractFragment {
 
+    private static final String FRAGMENT_TAG = "add_pokemon";
     private static final int REQUEST_CODE_PERMISSION = 1;
     private static final int REQ_CODE_PICK_IMAGE = 2;
-
     private static final String IMAGE_URI = "image_uri";
 
     @BindView(R.id.et_name)
@@ -64,6 +65,11 @@ public class AddPokemonFragment extends AbstractFragment {
     }
 
     @Override
+    public String getFragmentTag() {
+        return FRAGMENT_TAG;
+    }
+
+    @Override
     public AbstractFragment copy() {
         return new AddPokemonFragment();
     }
@@ -91,6 +97,11 @@ public class AddPokemonFragment extends AbstractFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(IMAGE_URI, imageUri);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -223,19 +234,17 @@ public class AddPokemonFragment extends AbstractFragment {
     }
 
     private void finish() {
-        if (getResources().getBoolean(R.bool.is_tablet_landscape)) {
-            ((MainActivity) getActivity()).replaceFragmentTabletLandscape(PokemonListFragment.newInstance(),
-                    MainActivity.POKEMON_LIST_TAG, true);
-            ((MainActivity) getActivity()).replaceFragmentTabletLandscape(AddPokemonFragment.newInstance(),
-                    MainActivity.ADD_POKEMON_TAG, false);
-        } else {
-            ((MainActivity) getActivity()).replaceFragment(new PokemonListFragment(), MainActivity.POKEMON_LIST_TAG);
-        }
-
-        View view = getActivity().getCurrentFocus();
+        MainActivity activity = (MainActivity) getActivity();
+        View view = activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        if (ApplicationUtils.isTabletAndLandscape()) {
+            activity.replaceFirstFragmentWithList();
+            activity.replaceFragment(AddPokemonFragment.newInstance(), R.id.container2, true);
+        } else {
+            activity.replaceFragment(PokemonListFragment.newInstance(), R.id.container);
         }
     }
 

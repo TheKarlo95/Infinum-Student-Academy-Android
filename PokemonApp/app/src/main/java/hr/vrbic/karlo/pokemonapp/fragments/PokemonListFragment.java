@@ -15,13 +15,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.beans.Pokemon;
-import hr.vrbic.karlo.pokemonapp.beans.PokemonsList;
+import hr.vrbic.karlo.pokemonapp.model.Pokemon;
+import hr.vrbic.karlo.pokemonapp.model.PokemonsList;
 import hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView;
 import hr.vrbic.karlo.pokemonapp.list.PokemonListAdapter;
 
 public class PokemonListFragment extends AbstractFragment {
 
+    public static final String FRAGMENT_TAG = "pokemon_list";
     private static final String POKEMONS = "pokemons";
 
     @BindView(R.id.erv_pokemons)
@@ -40,6 +41,11 @@ public class PokemonListFragment extends AbstractFragment {
 
     public static PokemonListFragment newInstance() {
         return new PokemonListFragment();
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return FRAGMENT_TAG;
     }
 
     @Override

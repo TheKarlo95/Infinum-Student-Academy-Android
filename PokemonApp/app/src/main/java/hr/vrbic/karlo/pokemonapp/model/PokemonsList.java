@@ -1,4 +1,4 @@
-package hr.vrbic.karlo.pokemonapp.beans;
+package hr.vrbic.karlo.pokemonapp.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,9 +6,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-/**
- * Created by TheKarlo95 on 24.7.2016..
- */
 public class PokemonsList {
 
     private static List<Pokemon> pokemonList = new ArrayList<>();

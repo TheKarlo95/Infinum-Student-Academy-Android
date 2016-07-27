@@ -170,7 +170,7 @@
             android:background="@color/colorPrimary"
             android:text="@string/save"
             android:textColor="@color/colorTextButton"
-            android:textSize="16sp"/>
+            android:textSize="@dimen/text_size_normal"/>
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -178,7 +178,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         android:src="@drawable/ic_add"
         app:layout_anchor="@id/iv_image"

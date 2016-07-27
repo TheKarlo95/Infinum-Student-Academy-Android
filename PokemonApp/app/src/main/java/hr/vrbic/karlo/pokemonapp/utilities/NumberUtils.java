@@ -1,19 +1,19 @@
 package hr.vrbic.karlo.pokemonapp.utilities;
 
 /**
- * {@code Numbers} is a utility class that offers static method that checks the provided argument similar to
+ * {@code NumberUtils} is a utility class that offers static method that checks the provided argument similar to
  * method {@linkplain java.util.Objects#requireNonNull(Object, String)}.
  *
  * @author Karlo Vrbic
  * @version 1.0
  */
 @SuppressWarnings("unused")
-public final class Numbers {
+public final class NumberUtils {
 
     /**
      * Unused constructor.
      */
-    private Numbers() {
+    private NumberUtils() {
     }
 
     /**

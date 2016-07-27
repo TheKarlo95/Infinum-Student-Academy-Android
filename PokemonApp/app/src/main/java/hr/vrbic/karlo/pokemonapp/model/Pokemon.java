@@ -1,4 +1,4 @@
-package hr.vrbic.karlo.pokemonapp.beans;
+package hr.vrbic.karlo.pokemonapp.model;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,8 +10,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.utilities.Numbers;
-import hr.vrbic.karlo.pokemonapp.utilities.Strings;
+import hr.vrbic.karlo.pokemonapp.utilities.NumberUtils;
+import hr.vrbic.karlo.pokemonapp.utilities.StringUtils;
 
 /**
  * {@code Pokemon} is a class that contains all information about one Pokemon.
@@ -104,17 +104,17 @@ public class Pokemon implements Parcelable, Comparable<Pokemon> {
                    @NonNull String gender,
                    @NonNull String description,
                    Uri imageUri) {
-        this.name = Strings.requireNonNullAndNonEmpty(name, context.getString(R.string.name_null),
+        this.name = StringUtils.requireNonNullAndNonEmpty(name, context.getString(R.string.name_null),
                 context.getString(R.string.name_empty));
-        this.height = Numbers.requirePositive(height, context.getString(R.string.height_positive));
-        this.weight = Numbers.requirePositive(weight, context.getString(R.string.weight_positive));
-        this.category = Strings.requireNonNullAndNonEmpty(category, context.getString(R.string.category_null),
+        this.height = NumberUtils.requirePositive(height, context.getString(R.string.height_positive));
+        this.weight = NumberUtils.requirePositive(weight, context.getString(R.string.weight_positive));
+        this.category = StringUtils.requireNonNullAndNonEmpty(category, context.getString(R.string.category_null),
                 context.getString(R.string.category_empty));
-        this.abilities = Strings.requireNonNullAndNonEmpty(abilities, context.getString(R.string.abilities_null),
+        this.abilities = StringUtils.requireNonNullAndNonEmpty(abilities, context.getString(R.string.abilities_null),
                 context.getString(R.string.abilities_empty));
-        this.gender = Strings.requireNonNullAndNonEmpty(gender, context.getString(R.string.gender_null),
+        this.gender = StringUtils.requireNonNullAndNonEmpty(gender, context.getString(R.string.gender_null),
                 context.getString(R.string.gender_empty));
-        this.description = Strings.requireNonNullAndNonEmpty(description, context.getString(R.string.description_null),
+        this.description = StringUtils.requireNonNullAndNonEmpty(description, context.getString(R.string.description_null),
                 context.getString(R.string.description_empty));
         if (imageUri != null) {
             this.imageUri = imageUri;
