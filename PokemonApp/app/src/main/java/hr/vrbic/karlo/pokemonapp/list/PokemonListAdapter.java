@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,7 +63,7 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
         this.context = Objects.requireNonNull(context, "Parameter context cannot be null.");
         this.clickListener = clickListener;
         this.changeListeners = new HashSet<>();
-        if (pokemons != null) {
+        if (pokemons != null && !pokemons.isEmpty()) {
             this.pokemons = new ArrayList<>(pokemons);
             Collections.sort(this.pokemons);
         }
@@ -100,7 +102,11 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
         Uri imageUri = pokemon.getImageUri();
 
         holder.tvPokemonName.setText(name);
-        holder.ivPokemonImage.setImageURI(imageUri);
+        if (imageUri != null) {
+            Glide.with(context).load(imageUri).into(holder.ivPokemonImage);
+        } else {
+            holder.ivPokemonImage.setImageDrawable(null);
+        }
     }
 
     @Override
@@ -132,9 +138,9 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     }
 
     /**
-     * Adds the specified Pokemon to the adapter(if this Pokemon haven't previously existed in the adapter).
+     * Adds the specified PokemonData to the adapter(if this PokemonData haven't previously existed in the adapter).
      *
-     * @param pokemon the Pokemon to be added
+     * @param pokemon the PokemonData to be added
      * @return {@code true} if pokemon adapter is modified; {@code false} otherwise.
      */
     public boolean add(Pokemon pokemon) {
@@ -179,9 +185,9 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     }
 
     /**
-     * Removes the specified Pokemon from this adapter.
+     * Removes the specified PokemonData from this adapter.
      *
-     * @param pokemon Pokemon to be removed
+     * @param pokemon PokemonData to be removed
      * @return {@code true} if pokemon adapter is modified; {@code false} otherwise.
      */
     public boolean remove(Pokemon pokemon) {
@@ -209,8 +215,8 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     /**
      * Notifies all change listeners about the added Pokemons.
      *
-     * @param index0 index of the first added Pokemon
-     * @param index1 index of the last added Pokemon
+     * @param index0 index of the first added PokemonData
+     * @param index1 index of the last added PokemonData
      */
     private void fireRoundResultsAdded(int index0, int index1) {
         for (EmptyRecyclerView.OnChangeListener changeListener : changeListeners) {
@@ -221,8 +227,8 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     /**
      * Notifies all change listeners about the removed Pokemons.
      *
-     * @param index0 index of the first removed Pokemon
-     * @param index1 index of the last removed Pokemon
+     * @param index0 index of the first removed PokemonData
+     * @param index1 index of the last removed PokemonData
      */
     private void fireRoundResultsRemoved(int index0, int index1) {
         for (EmptyRecyclerView.OnChangeListener changeListener : changeListeners) {

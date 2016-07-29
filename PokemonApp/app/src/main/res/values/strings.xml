@@ -23,6 +23,16 @@
     <string name="height_in_meters">%1$sm</string>
     <string name="weight_in_kilos">%1$skg</string>
 
+    <!-- activity_login && activity_sign_up  -->
+    <string name="internet_permission_explanation">You need to allow this application to connect to internet so
+        you could see pokemon list and add new pokemons.</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="nickname">Nickname</string>
+    <string name="confirm_password">Confirm password</string>
+
     <!-- pokemon attributes  -->
     <string name="pokemon_name">Name</string>
     <string name="pokemon_height">Height</string>
@@ -49,8 +59,17 @@
     <string name="description_null">Description cannot be null</string>
     <string name="description_empty">Description cannot be empty</string>
     <string name="image_null">Image cannot be null</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cannot_be_empty">This field can not be empty</string>
+    <string name="login_invalid_email_password">Invalid email or password</string>
+    <string name="login_fail">Failed to login</string>
+    <string name="sign_up_fail">Failed to create user</string>
+
+    <string name="permission">Permissions</string>
+
+    <!-- image placeholders -->
+    <string name="mail_icon">mail_icon</string>
+    <string name="person_icon">person_icon</string>
+    <string name="pokemon_sprite">pokemon_image</string>
 
 </resources>
