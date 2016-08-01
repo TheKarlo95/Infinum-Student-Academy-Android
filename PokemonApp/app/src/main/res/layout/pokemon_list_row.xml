@@ -13,7 +13,7 @@
         android:paddingEnd="@dimen/list_image_horizontal_padding"
         android:paddingTop="@dimen/list_image_vertical_padding"
         android:paddingBottom="@dimen/list_image_vertical_padding"
-        android:contentDescription="pokemon_image"/>
+        android:contentDescription="@string/pokemon_sprite"/>
 
     <TextView
         android:id="@+id/tv_details_name"

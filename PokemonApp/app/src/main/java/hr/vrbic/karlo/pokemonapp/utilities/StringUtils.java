@@ -1,20 +1,25 @@
 package hr.vrbic.karlo.pokemonapp.utilities;
 
+import android.widget.EditText;
+
 import java.util.Objects;
 
+import hr.vrbic.karlo.pokemonapp.PokemonApp;
+import hr.vrbic.karlo.pokemonapp.R;
+
 /**
- * {@code Strings} is a utility class that offers static methods that do some tasks with {@linkplain String strings}.
+ * {@code StringUtils} is a utility class that offers static methods that do some tasks with {@linkplain String strings}.
  *
  * @author Karlo Vrbic
  * @version 1.0
  */
 @SuppressWarnings("unused")
-public class Strings {
+public class StringUtils {
 
     /**
      * Unused constructor.
      */
-    private Strings() {
+    private StringUtils() {
     }
 
     /**
@@ -34,5 +39,15 @@ public class Strings {
             throw new IllegalArgumentException(emptyMessage);
         }
         return string.trim();
+    }
+
+    public static String getString(EditText editText) {
+        String str = null;
+        if (editText.getText().toString().trim().equalsIgnoreCase("")) {
+            editText.setError(PokemonApp.getContext().getString(R.string.cannot_be_empty));
+        } else {
+            str = editText.getText().toString();
+        }
+        return str;
     }
 }
