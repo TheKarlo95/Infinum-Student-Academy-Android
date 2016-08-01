@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".PokemonApp"
@@ -14,24 +15,25 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
-            android:theme="@style/AppThemeNoActionBar">
+            android:name="hr.vrbic.karlo.pokemonapp.activities.LoginActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.SignUpActivity"
             android:label="Sign up"
-            android:parentActivityName=".activities.LoginActivity" >
+            android:parentActivityName=".activities.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.LoginActivity" />
+                android:value=".activities.LoginActivity"/>
         </activity>
     </application>
 

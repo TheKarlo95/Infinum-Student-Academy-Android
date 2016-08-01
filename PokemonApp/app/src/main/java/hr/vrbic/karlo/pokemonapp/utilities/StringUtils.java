@@ -41,13 +41,33 @@ public class StringUtils {
         return string.trim();
     }
 
-    public static String getString(EditText editText) {
+    public static String requireNonEmptyAndClear(EditText editText) {
         String str = null;
         if (editText.getText().toString().trim().equalsIgnoreCase("")) {
             editText.setError(PokemonApp.getContext().getString(R.string.cannot_be_empty));
         } else {
-            str = editText.getText().toString();
+            str = getStringAndClear(editText);
         }
+        return str;
+    }
+
+    public static String requireNonEmpty(EditText editText) {
+        String str = null;
+        if (editText.getText().toString().trim().equalsIgnoreCase("")) {
+            editText.setError(PokemonApp.getContext().getString(R.string.cannot_be_empty));
+        } else {
+            str = getString(editText);
+        }
+        return str;
+    }
+
+    public static String getString(EditText editText) {
+        return editText.getText().toString();
+    }
+
+    public static String getStringAndClear(EditText editText) {
+        String str = editText.getText().toString();
+        editText.getText().clear();
         return str;
     }
 }

@@ -67,6 +67,21 @@
 
     <string name="permission">Permissions</string>
 
+    <!-- pokemon interactor error messages -->
+    <string name="get_pokemon_fail">Failed to load pokemons</string>
+    <string name="get_pokemons_fail_db">Failed to load pokemon cache</string>
+    <string name="get_categories_fail">Failed to load pokemon categories</string>
+    <string name="get_categories_fail_db">Failed to load pokemon categories cache</string>
+    <string name="get_abilities_fail">Failed to load pokemon abilities</string>
+    <string name="get_abilities_fail_db">Failed to load pokemon abilities cache</string>
+
+    <string name="login_fail_no_internet">You cannot login without internet connection\nCached copy of list
+        will be shown if there is any</string>
+    <string name="sign_up_no_internet">You cannot sign up without internet connection</string>
+    <string name="pokemon_create_fail">Failed to create pokemon</string>
+    <string name="add_pokemon_fail_no_connection">You cannot add pokemon while offline</string>
+    <string name="refresh_fail_no_connection">You cannot refresh list while offline</string>
+
     <!-- image placeholders -->
     <string name="mail_icon">mail_icon</string>
     <string name="person_icon">person_icon</string>

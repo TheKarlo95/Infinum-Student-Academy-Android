@@ -1,6 +1,5 @@
 package hr.vrbic.karlo.pokemonapp.network;
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -10,7 +9,6 @@ import java.util.Date;
 
 import hr.vrbic.karlo.pokemonapp.BuildConfig;
 import hr.vrbic.karlo.pokemonapp.network.deserializers.DateDeserializer;
-import hr.vrbic.karlo.pokemonapp.network.deserializers.UriDeserializer;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -22,7 +20,6 @@ public class ApiManager {
     public static final String API_ENDPOINT = "https://pokeapi.infinum.co";
 
     private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Uri.class, new UriDeserializer())
             .registerTypeAdapter(Date.class, new DateDeserializer())
             .create();
 

@@ -14,25 +14,7 @@ import hr.vrbic.karlo.pokemonapp.R;
  */
 public class PermissionUtil {
 
-    private static final int REQUEST_INTERNET_PERMISSION = 1;
-    private static final int REQUEST_EXTERNAL_STORAGE_PERMISSION = 2;
-
-    public static void doInternetOperation(Context context, Activity activity, Runnable operation) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-                    Manifest.permission.INTERNET)) {
-                showInternetExplanation(context, activity);
-            } else {
-                ActivityCompat.requestPermissions(activity,
-                        new String[]{Manifest.permission.INTERNET},
-                        REQUEST_INTERNET_PERMISSION);
-            }
-        } else {
-            operation.run();
-        }
-    }
+    private static final int REQUEST_EXTERNAL_STORAGE_PERMISSION = 1;
 
     public static void doExternalStorageOperation(Context context, Activity activity, Runnable operation) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -49,27 +31,6 @@ public class PermissionUtil {
         } else {
             operation.run();
         }
-    }
-
-    private static void showInternetExplanation(final Context context, final Activity activity) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.permission))
-                .setMessage(R.string.internet_permission_explanation)
-                .setPositiveButton(context.getString(R.string.allow), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        ActivityCompat.requestPermissions(activity,
-                                new String[]{Manifest.permission.INTERNET},
-                                REQUEST_INTERNET_PERMISSION);
-                    }
-                })
-                .setNegativeButton(context.getString(R.string.deny), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                }).create().show();
     }
 
     private static void showExternalStorageExplanation(final Context context, final Activity activity) {

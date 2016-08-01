@@ -9,33 +9,36 @@ public class UserCreateResponse {
     @Expose
     private Data data;
 
-    public Data getData() {
-        return data;
+    public User getUser() {
+        return new User(getUsername(), getEMail(), getAuthToken());
     }
+
+    public String getId() {
+        return data.id;
+    }
+
+    public String getEMail() {
+        return data.attributes.email;
+    }
+
+    public String getUsername() {
+        return data.attributes.username;
+    }
+
+    public String getAuthToken() {
+        return data.attributes.authToken;
+    }
+
 
     public class Data {
 
         @SerializedName("id")
         @Expose
         public String id;
-        @SerializedName("type")
-        @Expose
-        public String type;
         @SerializedName("attributes")
         @Expose
         public Attributes attributes;
 
-        public String getId() {
-            return id;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public Attributes getAttributes() {
-            return attributes;
-        }
     }
 
     public class Attributes {
@@ -50,16 +53,5 @@ public class UserCreateResponse {
         @Expose
         public String authToken;
 
-        public String getAuthToken() {
-            return authToken;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getUsername() {
-            return username;
-        }
     }
 }
