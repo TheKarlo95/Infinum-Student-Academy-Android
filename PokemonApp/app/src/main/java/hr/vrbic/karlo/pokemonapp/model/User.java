@@ -49,7 +49,6 @@ public class User implements Parcelable {
         return String.format("Token token=%s, email=%s", authToken, email);
     }
 
-
     @Override
     public int describeContents() {
         return 0;

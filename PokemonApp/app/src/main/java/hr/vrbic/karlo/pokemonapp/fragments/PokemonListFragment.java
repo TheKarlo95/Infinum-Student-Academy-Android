@@ -3,20 +3,24 @@ package hr.vrbic.karlo.pokemonapp.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import hr.vrbic.karlo.pokemonapp.Consumer;
+import hr.vrbic.karlo.pokemonapp.PokemonInteractor;
 import hr.vrbic.karlo.pokemonapp.R;
 import hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView;
 import hr.vrbic.karlo.pokemonapp.list.PokemonListAdapter;
@@ -24,20 +28,21 @@ import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 import hr.vrbic.karlo.pokemonapp.model.PokemonListResponse;
 import hr.vrbic.karlo.pokemonapp.model.User;
 import hr.vrbic.karlo.pokemonapp.network.ApiManager;
+import hr.vrbic.karlo.pokemonapp.utilities.NetworkUtils;
+import hr.vrbic.karlo.pokemonapp.utilities.ToastUtils;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PokemonListFragment extends AbstractFragment {
 
     public static final String FRAGMENT_TAG = "pokemon_list";
     private static final String USER = "user";
-    private static final String POKEMONS = "pokemons";
 
     @BindView(R.id.erv_pokemons)
     EmptyRecyclerView ervPokemons;
     @BindView(R.id.ll_empty_list)
     LinearLayout llEmptyList;
+    @BindView(R.id.srl_list)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     Call<PokemonListResponse> pokedexCall = null;
 
@@ -45,17 +50,18 @@ public class PokemonListFragment extends AbstractFragment {
     private User user;
     private Unbinder unbinder;
     private OnFragmentInteractionListener listener;
-
+    private PokemonInteractor interactor;
 
     public PokemonListFragment() {
         // Required empty public constructor
     }
 
-    public static PokemonListFragment newInstance(User user) {
-        Objects.requireNonNull(user, "Null parameter: user");
+    public static PokemonListFragment newInstance(@Nullable User user) {
         PokemonListFragment fragment = new PokemonListFragment();
-        fragment.user = user;
-        fragment.pokedexCall = ApiManager.getService().getAllPokemons(user.getAuthorization());
+        if (user != null) {
+            fragment.user = user;
+            fragment.pokedexCall = ApiManager.getService().getAllPokemons(user.getAuthorization());
+        }
         return fragment;
     }
 
@@ -79,14 +85,36 @@ public class PokemonListFragment extends AbstractFragment {
 
         if (savedInstanceState != null) {
             user = savedInstanceState.getParcelable(USER);
-            pokedexCall = ApiManager.getService().getAllPokemons(user.getAuthorization());
+            if (user != null) {
+                pokedexCall = ApiManager.getService().getAllPokemons(user.getAuthorization());
+            }
         }
+        interactor = new PokemonInteractor(getContext(), user);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pokemon_list, container, false);
+
         unbinder = ButterKnife.bind(this, view);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkUtils.isNetworkAvailable() && user != null) {
+                    interactor.getAllPokemons(new Consumer<List<Pokemon>>() {
+                        @Override
+                        public void accept(List<Pokemon> pokemons) {
+                            setPokemonList(pokemons);
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                } else {
+                    ToastUtils.showToast(getContext(), R.string.refresh_fail_no_connection);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
 
         this.adapter = new PokemonListAdapter(getContext(), null, new EmptyRecyclerView.OnClickListener<Pokemon>() {
             @Override
@@ -130,6 +158,8 @@ public class PokemonListFragment extends AbstractFragment {
         super.onDetach();
         listener = null;
         adapter = null;
+        user = null;
+        interactor = null;
     }
 
 
@@ -144,28 +174,31 @@ public class PokemonListFragment extends AbstractFragment {
         }
     }
 
-    private void getPokemonList() {
-        pokedexCall.enqueue(new Callback<PokemonListResponse>() {
-            @Override
-            public void onResponse(Call<PokemonListResponse> call, Response<PokemonListResponse> response) {
-                if (response.isSuccessful()) {
-                    setPokemonList(response.body().getPokemonList());
-                } else {
-                    setPokemonList(null);
-                    Toast.makeText(getActivity(), "Cannot get pokemon list. You are probably offline",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
+    @Override
+    public void onStop() {
+        super.onStop();
+        interactor.cancelAllCalls();
+    }
 
-            @Override
-            public void onFailure(Call<PokemonListResponse> call, Throwable t) {
-                if (!call.isCanceled()) {
-                    setPokemonList(null);
-                    Toast.makeText(getActivity(), "Cannot get pokemon list. You are probably offline",
-                            Toast.LENGTH_LONG).show();
+    private void getPokemonList() {
+        if (NetworkUtils.isNetworkAvailable() && user != null) {
+            interactor.getAllPokemons(new Consumer<List<Pokemon>>() {
+                @Override
+                public void accept(List<Pokemon> pokemons) {
+                    setPokemonList(pokemons);
                 }
-            }
-        });
+            });
+        } else {
+            SQLite.select()
+                    .from(Pokemon.class)
+                    .async()
+                    .queryListResultCallback(new QueryTransaction.QueryResultListCallback<Pokemon>() {
+                        @Override
+                        public void onListQueryResult(QueryTransaction transaction, @Nullable List<Pokemon> tResult) {
+                            setPokemonList(tResult);
+                        }
+                    }).execute();
+        }
     }
 
     private void setPokemonList(List<Pokemon> list) {
@@ -189,4 +222,5 @@ public class PokemonListFragment extends AbstractFragment {
         void openPokemonDetails(Pokemon pokemon);
 
     }
+
 }

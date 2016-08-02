@@ -1,9 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
+def dbFlow_version = "3.1.1"
+
 android {
     compileSdkVersion 23
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "hr.vrbic.karlo.pokemonapp"
@@ -41,4 +43,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.1.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:design:23.4.0'
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbFlow_version}"
+    // use kapt for kotlin apt
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbFlow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbFlow_version}"
 }

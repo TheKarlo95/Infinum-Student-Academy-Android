@@ -1,7 +1,7 @@
 package hr.vrbic.karlo.pokemonapp.list;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +50,8 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
      */
     private Set<EmptyRecyclerView.OnChangeListener> changeListeners;
 
+    private int previousPosition;
+
     /**
      * Constructs a new {@code PokemonListAdapter} with specified parameters.
      *
@@ -66,6 +68,7 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
         if (pokemons != null && !pokemons.isEmpty()) {
             this.pokemons = new ArrayList<>(pokemons);
             Collections.sort(this.pokemons);
+            notifyDataSetChanged();
         }
     }
 
@@ -96,18 +99,31 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
 
     @Override
     public void onBindViewHolder(PokemonListAdapter.ViewHolder holder, int position) {
+        animate(holder, position);
+
         Pokemon pokemon = pokemons.get(position);
 
         String name = pokemon.getName();
-        Uri imageUri = pokemon.getImageUri();
+        String imageUri = pokemon.getImageUriWithEndpoint();
 
         holder.tvPokemonName.setText(name);
         if (imageUri != null) {
             Glide.with(context).load(imageUri).into(holder.ivPokemonImage);
-        } else {
-            holder.ivPokemonImage.setImageDrawable(null);
         }
     }
+
+    private void animate(PokemonListAdapter.ViewHolder holder, int position) {
+        ObjectAnimator animator = null;
+        if (position > previousPosition) {
+            animator = ObjectAnimator.ofFloat(holder, "translationY", 100, 0);
+        } else {
+            animator = ObjectAnimator.ofFloat(holder, "translationY", -100, 0);
+        }
+        animator.setDuration(1000);
+        animator.start();
+        previousPosition = position;
+    }
+
 
     @Override
     public int getItemCount() {
@@ -138,9 +154,9 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     }
 
     /**
-     * Adds the specified PokemonData to the adapter(if this PokemonData haven't previously existed in the adapter).
+     * Adds the specified PokemonInteractor to the adapter(if this PokemonInteractor haven't previously existed in the adapter).
      *
-     * @param pokemon the PokemonData to be added
+     * @param pokemon the PokemonInteractor to be added
      * @return {@code true} if pokemon adapter is modified; {@code false} otherwise.
      */
     public boolean add(Pokemon pokemon) {
@@ -157,7 +173,7 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
 
         int index = pokemons.indexOf(pokemon);
         fireRoundResultsAdded(index, index);
-        notifyDataSetChanged();
+        notifyItemInserted(index);
         return true;
     }
 
@@ -185,9 +201,9 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     }
 
     /**
-     * Removes the specified PokemonData from this adapter.
+     * Removes the specified PokemonInteractor from this adapter.
      *
-     * @param pokemon PokemonData to be removed
+     * @param pokemon PokemonInteractor to be removed
      * @return {@code true} if pokemon adapter is modified; {@code false} otherwise.
      */
     public boolean remove(Pokemon pokemon) {
@@ -215,8 +231,8 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     /**
      * Notifies all change listeners about the added Pokemons.
      *
-     * @param index0 index of the first added PokemonData
-     * @param index1 index of the last added PokemonData
+     * @param index0 index of the first added PokemonInteractor
+     * @param index1 index of the last added PokemonInteractor
      */
     private void fireRoundResultsAdded(int index0, int index1) {
         for (EmptyRecyclerView.OnChangeListener changeListener : changeListeners) {
@@ -227,8 +243,8 @@ public class PokemonListAdapter extends EmptyRecyclerView.Adapter<PokemonListAda
     /**
      * Notifies all change listeners about the removed Pokemons.
      *
-     * @param index0 index of the first removed PokemonData
-     * @param index1 index of the last removed PokemonData
+     * @param index0 index of the first removed PokemonInteractor
+     * @param index1 index of the last removed PokemonInteractor
      */
     private void fireRoundResultsRemoved(int index0, int index1) {
         for (EmptyRecyclerView.OnChangeListener changeListener : changeListeners) {

@@ -1,7 +1,5 @@
 package hr.vrbic.karlo.pokemonapp.model;
 
-import android.net.Uri;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,25 +14,9 @@ public class PokemonListResponse {
     @SerializedName("data")
     @Expose
     private List<PokemonData> data = new ArrayList<>();
-    @SerializedName("links")
-    @Expose
-    private Links links;
 
-    public List<Pokemon> getPokemonList() {
-        List<Pokemon> output = new ArrayList<>();
-
-        for (PokemonData pokemonData : data) {
-            Pokemon pokemon = new Pokemon(pokemonData.attributes.name,
-                    pokemonData.attributes.height,
-                    pokemonData.attributes.weight,
-                    pokemonData.relationships.types.getTypeIDs(),
-                    pokemonData.relationships.moves.getMovesIDs(),
-                    pokemonData.attributes.description,
-                    pokemonData.attributes.imageUrl);
-            output.add(pokemon);
-        }
-
-        return output;
+    public List<PokemonData> getPokemonDataList() {
+        return data;
     }
 
     public class PokemonData {
@@ -51,6 +33,35 @@ public class PokemonListResponse {
         @SerializedName("relationships")
         @Expose
         private Relationships relationships;
+
+        public String getName() {
+            return attributes.name;
+        }
+
+        public double getHeight() {
+            return attributes.height;
+        }
+
+        public double getWeight() {
+            return attributes.weight;
+        }
+
+        public List<Integer> getAbilityIds() {
+            return relationships.moves.getMoveIDs();
+        }
+
+        public List<Integer> getCategoryIds() {
+            return relationships.types.getTypeIDs();
+        }
+
+
+        public String getImageUrl() {
+            return attributes.imageUrl;
+        }
+
+        public String getDescription() {
+            return attributes.description;
+        }
 
     }
 
@@ -82,7 +93,7 @@ public class PokemonListResponse {
         private String updatedAt;
         @SerializedName("image-url")
         @Expose
-        private Uri imageUrl;
+        private String imageUrl;
         @SerializedName("description")
         @Expose
         private String description;
@@ -136,7 +147,7 @@ public class PokemonListResponse {
         @Expose
         private List<Move> data = new ArrayList<>();
 
-        public List<Integer> getMovesIDs() {
+        public List<Integer> getMoveIDs() {
             if (!data.isEmpty()) {
                 List<Integer> typesList = new ArrayList<>();
                 for (Move move : data) {
@@ -154,21 +165,6 @@ public class PokemonListResponse {
         @SerializedName("id")
         @Expose
         private String id;
-
-    }
-
-
-    public class Links {
-
-        @SerializedName("self")
-        @Expose
-        private Uri self;
-        @SerializedName("next")
-        @Expose
-        private Uri next;
-        @SerializedName("last")
-        @Expose
-        private Uri last;
 
     }
 

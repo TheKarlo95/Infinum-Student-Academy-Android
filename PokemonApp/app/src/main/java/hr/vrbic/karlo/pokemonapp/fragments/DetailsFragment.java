@@ -1,13 +1,11 @@
 package hr.vrbic.karlo.pokemonapp.fragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -15,21 +13,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import hr.vrbic.karlo.pokemonapp.R;
-import hr.vrbic.karlo.pokemonapp.activities.MainActivity;
-import hr.vrbic.karlo.pokemonapp.model.MoveResponse;
+import hr.vrbic.karlo.pokemonapp.model.Ability;
+import hr.vrbic.karlo.pokemonapp.model.Category;
 import hr.vrbic.karlo.pokemonapp.model.Pokemon;
 import hr.vrbic.karlo.pokemonapp.model.User;
-import hr.vrbic.karlo.pokemonapp.network.ApiManager;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class DetailsFragment extends AbstractFragment {
 
@@ -56,6 +49,7 @@ public class DetailsFragment extends AbstractFragment {
 
     public DetailsFragment() {
         // Required empty public constructor
+        // remove user
     }
 
     public static DetailsFragment newInstance(User user, Pokemon pokemon) {
@@ -99,21 +93,19 @@ public class DetailsFragment extends AbstractFragment {
         unbinder = ButterKnife.bind(this, view);
 
         Pokemon pokemon = getArguments().getParcelable(POKEMON);
-        User user = getArguments().getParcelable(USER);
 
         if (pokemon != null) {
             tvName.setText(pokemon.getName());
             tvHeight.setText(getString(R.string.height_in_meters, pokemon.getHeight()));
             tvWeight.setText(getString(R.string.weight_in_kilos, pokemon.getWeight()));
             tvCategory.setText(StringUtils.join(pokemon.getCategories(), ", "));
-            getAbilities(user, pokemon);
-            updateCategories(pokemon);
+            updateAbilitiesList(pokemon);
+            updateCategoriesList(pokemon);
             tvDescription.setText(pokemon.getDescription());
-            Uri imageUri = pokemon.getImageUri();
+            String imageUri = pokemon.getImageUriWithEndpoint();
+
             if (imageUri != null) {
                 Glide.with(this).load(imageUri).into(ivImage);
-            } else {
-                ivImage.setImageDrawable(null);
             }
         }
 
@@ -129,55 +121,31 @@ public class DetailsFragment extends AbstractFragment {
         }
     }
 
-    private void getAbilities(User user, Pokemon pokemon) {
-        final List<Integer> abilitiesIds = pokemon.getAbilities();
-        final List<String> moveNames = new ArrayList<>();
+    private void updateAbilitiesList(Pokemon pokemon) {
+        List<String> abilityNames = new ArrayList<>();
+        List<Ability> abilities = pokemon.getAbilities();
 
-        if (abilitiesIds != null) {
-            for (Integer id : abilitiesIds) {
-                final Call<MoveResponse> moveCall = ApiManager.getService().getMove(user.getAuthorization(), id);
-                moveCall.enqueue(new Callback<MoveResponse>() {
-                    @Override
-                    public void onResponse(Call<MoveResponse> call, Response<MoveResponse> response) {
-                        if (response.isSuccessful()) {
-                            moveNames.add(response.body().getMoveName());
-                            updateAbilities(moveNames);
-                        } else {
-                            Toast.makeText(getActivity(), "Failed to load move", Toast.LENGTH_LONG).show();
-                        }
-                    }
+        if (abilities != null) {
+            for (Ability ability : abilities) {
+                abilityNames.add(ability.getName());
+            }
 
-                    @Override
-                    public void onFailure(Call<MoveResponse> call, Throwable t) {
-                        if (!call.isCanceled()) {
-                            Toast.makeText(getActivity(), "Failed to load move", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+            if (tvAbilities != null) {
+                tvAbilities.setText(StringUtils.join(abilityNames, "\n"));
             }
         }
     }
 
-    private void updateAbilities(List<String> abilities) {
-        if (tvAbilities != null) {
-            tvAbilities.setText(StringUtils.join(abilities, "\n"));
-        }
-    }
+    private void updateCategoriesList(Pokemon pokemon) {
+        List<String> categoryNames = new ArrayList<>();
+        List<Category> categories = pokemon.getCategories();
 
-    private void updateCategories(Pokemon pokemon) {
-        Map<Integer, String> allCategories = ((MainActivity) getActivity()).getCategories();
-
-        List<String> categories = new ArrayList<>();
-        List<Integer> categoryIds = pokemon.getCategories();
-
-        if (categoryIds != null) {
-            for (Integer id : categoryIds) {
-                if (allCategories.keySet().contains(id)) {
-                    categories.add(allCategories.get(id));
-                }
+        if (categories != null) {
+            for (Category category : categories) {
+                categoryNames.add(category.getName());
             }
             if (tvCategory != null) {
-                tvCategory.setText(StringUtils.join(categories, "\n"));
+                tvCategory.setText(StringUtils.join(categoryNames, "\n"));
             }
         }
     }

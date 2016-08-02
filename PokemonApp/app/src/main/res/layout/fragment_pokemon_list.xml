@@ -6,18 +6,23 @@
     android:layout_height="match_parent"
     tools:context="hr.vrbic.karlo.pokemonapp.fragments.PokemonListFragment">
 
-    <hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView
-        android:id="@+id/erv_pokemons"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_list"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="5dp"
-        android:scrollbars="vertical"
+        android:layout_height="match_parent">
 
-        app:layoutManager="LinearLayoutManager">
+        <hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView
+            android:id="@+id/erv_pokemons"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"
+            android:scrollbars="vertical"
 
-    </hr.vrbic.karlo.pokemonapp.list.EmptyRecyclerView>
+            app:layoutManager="LinearLayoutManager"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/ll_empty_list"
