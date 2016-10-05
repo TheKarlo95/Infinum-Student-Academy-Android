@@ -1,8 +1,9 @@
-# Homework1
+# Infinum Student Academy: Android
+## Homework1
 - simple Android app that counts number of clicks.
-# PokemonApp
+## Homework2
 - simple Android web browser app.
-# PokemonApp
+## PokemonApp
 - Android app that lets user add new Pokemons and view other peoples Pokemon, upvote/downvote and comment them.
 
 All apps are made as a part of Infinum Student Academy: Android course.
